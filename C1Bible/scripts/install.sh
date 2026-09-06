@@ -12,8 +12,8 @@ check "$stage/mpenMain.bible" "$LAUNCHER"
 check "$stage/ic_desktop_cwxz.png" "$ICON"
 check "$stage/c1bible" "$APP"
 check "$stage/bible.dat" "$DATA"
-check "$stage/font15.bin" "$FONT"
-check "$stage/width15.bin" "$WIDTH"
+check "$stage/font12.bin" "$FONT"
+check "$stage/width12.bin" "$WIDTH"
 check "$stage/launch-bible.sh" "$WRAPPER"
 current=$(hash "$launcher")
 [ "$current" = "$BASE" ] || [ "$current" = "$LAUNCHER" ] || { echo 'Unsupported launcher; refusing overwrite'; exit 1; }
@@ -33,15 +33,15 @@ if [ ! -f "$recovery/mpenMain.pre-bible" ]; then
 fi
 check "$recovery/mpenMain.pre-bible" "$BASE"
 check "$recovery/ic_desktop_cwxz.pre-bible.png" "$BASE_ICON"
-for name in c1bible bible.dat font15.bin width15.bin; do
+for name in c1bible bible.dat font12.bin width12.bin; do
     cp "$stage/$name" "$appdir/$name.new"
 done
 chmod 755 "$appdir/c1bible.new"
 check "$appdir/c1bible.new" "$APP"
 check "$appdir/bible.dat.new" "$DATA"
-check "$appdir/font15.bin.new" "$FONT"
-check "$appdir/width15.bin.new" "$WIDTH"
-for name in c1bible bible.dat font15.bin width15.bin; do mv "$appdir/$name.new" "$appdir/$name"; done
+check "$appdir/font12.bin.new" "$FONT"
+check "$appdir/width12.bin.new" "$WIDTH"
+for name in c1bible bible.dat font12.bin width12.bin; do mv "$appdir/$name.new" "$appdir/$name"; done
 cp "$stage/launch-bible.sh" /usr/data/h.new
 chmod 755 /usr/data/h.new
 check /usr/data/h.new "$WRAPPER"

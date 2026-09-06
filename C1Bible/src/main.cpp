@@ -19,10 +19,29 @@
 #include <utility>
 #include <vector>
 
+#ifndef C1BIBLE_FONT_PATH
+#define C1BIBLE_FONT_PATH "/storage/c1bible/font12.bin"
+#endif
+#ifndef C1BIBLE_WIDTH_PATH
+#define C1BIBLE_WIDTH_PATH "/storage/c1bible/width12.bin"
+#endif
+#ifndef C1BIBLE_READER_LINE_HEIGHT
+#define C1BIBLE_READER_LINE_HEIGHT 13
+#endif
+#ifndef C1BIBLE_READER_LINES
+#define C1BIBLE_READER_LINES 8
+#endif
+#ifndef C1BIBLE_HEADER_BOLD
+#define C1BIBLE_HEADER_BOLD false
+#endif
+
 static constexpr const char *DATA_PATH = "/storage/c1bible/bible.dat";
-static constexpr const char *FONT_PATH = "/storage/c1bible/font15.bin";
-static constexpr const char *WIDTH_PATH = "/storage/c1bible/width15.bin";
+static constexpr const char *FONT_PATH = C1BIBLE_FONT_PATH;
+static constexpr const char *WIDTH_PATH = C1BIBLE_WIDTH_PATH;
 static constexpr const char *STATE_PATH = "/storage/c1bible/state.txt";
+static constexpr int READER_LINE_HEIGHT = C1BIBLE_READER_LINE_HEIGHT;
+static constexpr int READER_LINES = C1BIBLE_READER_LINES;
+static constexpr bool HEADER_BOLD = C1BIBLE_HEADER_BOLD;
 static volatile sig_atomic_t stopped = 0;
 static void stop_handler(int) { stopped = 1; }
 static uint64_t milliseconds() {
@@ -308,13 +327,13 @@ struct UI {
             if (db.records[i].verse == targetVerse) targetLine = int(lines.size());
             add_wrapped(db.records[i].verse, db.text(db.records[i]));
         }
-        page = std::max(0, targetLine / 6);
+        page = std::max(0, targetLine / READER_LINES);
         view = View::Reader; remember_page();
     }
-    int pages() const { return std::max(1, int((lines.size() + 5) / 6)); }
+    int pages() const { return std::max(1, int((lines.size() + READER_LINES - 1) / READER_LINES)); }
     void remember_page() {
         if (view != View::Reader || lines.empty()) return;
-        int line = std::min(int(lines.size()) - 1, page * 6);
+        int line = std::min(int(lines.size()) - 1, page * READER_LINES);
         lastBook = book; lastChapter = chapter; lastVerse = lines[line].verse; save_state();
     }
     void change_chapter(int delta) {
@@ -405,13 +424,16 @@ struct UI {
             if (code == KEY_PAGEUP) { change_chapter(-1); return false; }
             if (code == KEY_PAGEDOWN) { change_chapter(1); return false; }
             if (code == KEY_LEFT || code == KEY_UP) page = std::max(0, page - 1);
-            else if (code == KEY_RIGHT || code == KEY_DOWN || code == KEY_ENTER || code == KEY_OK) page = std::min(pages() - 1, page + 1);
+            else if (code == KEY_RIGHT || code == KEY_DOWN || code == KEY_ENTER || code == KEY_OK) {
+                if (page + 1 < pages()) ++page;
+                else { change_chapter(1); return false; }
+            }
             remember_page(); return false;
         }
         return false;
     }
     void header(std::string_view title, std::string_view right = {}) {
-        book_mark(8, 1); font.draw(34, 1, font.fit(title, right.empty() ? 252 : 190), true, true);
+        book_mark(8, 1); font.draw(34, 1, font.fit(title, right.empty() ? 252 : 190), true, HEADER_BOLD);
         if (!right.empty()) font.draw(288 - font.measure(right), 1, right);
         rect(8, 20, 280, 1);
     }
@@ -449,9 +471,9 @@ struct UI {
     void render_reader() {
         std::string title = std::string(BOOKS[book]) + " " + std::to_string(chapter);
         header(title, format("%d / %d", page + 1, pages()));
-        for (int i = 0; i < 6; ++i) {
-            int index = page * 6 + i;
-            if (index < int(lines.size())) font.draw(8, 23 + i * 18, lines[index].text);
+        for (int i = 0; i < READER_LINES; ++i) {
+            int index = page * READER_LINES + i;
+            if (index < int(lines.size())) font.draw(8, 23 + i * READER_LINE_HEIGHT, lines[index].text);
         }
         rect(8, 130, 280, 1);
         font.draw(8, 134, "← →翻页");
@@ -559,22 +581,32 @@ static int selftest(BibleData &db, Font &font) {
     if (ui.view != View::Reader || ui.lines.empty()) return 6;
     ui.query = "endian"; ui.perform_search();
     if (ui.results.empty()) return 7;
+    ui.book = 42; ui.chapter = 3; ui.open_reader(1); ui.page = ui.pages() - 1;
+    ui.key(KEY_RIGHT);
+    if (ui.book != 42 || ui.chapter != 4 || ui.page != 0 || ui.view != View::Reader) return 8;
+    ui.book = 39; ui.chapter = 28; ui.open_reader(1); ui.page = ui.pages() - 1;
+    ui.key(KEY_ENTER);
+    if (ui.book != 40 || ui.chapter != 1 || ui.page != 0) return 9;
+    ui.book = 65; ui.chapter = 22; ui.open_reader(1); ui.page = ui.pages() - 1;
+    int finalPage = ui.page; ui.key(KEY_RIGHT);
+    if (ui.book != 65 || ui.chapter != 22 || ui.page != finalPage) return 10;
     remove("/tmp/c1bible-selftest-state.txt");
-    puts("PASS: 66 books, 1189 chapters, 31021 verses, pinyin search, reader paging, HOME isolation");
+    puts("PASS: 66 books, 1189 chapters, 31021 verses, pinyin search, continuous chapter paging, HOME isolation");
     return 0;
 }
 
 int main(int argc, char **argv) { try {
     BibleData db; db.load(); Font font; font.load();
     if (argc == 2 && std::string(argv[1]) == "--version") {
-        puts("C1Bible 1.0.0 / CUVS / 31021 verses / 1-bit"); return 0;
+        puts("C1Bible 1.1.1 / Fusion Pixel 12px / CUVS / 31021 verses / 1-bit"); return 0;
     }
     if (argc == 2 && std::string(argv[1]) == "--selftest") return selftest(db, font);
-    UI ui(db, font);
+    UI ui(db, font, argc == 3 ? "/tmp/c1bible-preview-state.txt" : STATE_PATH);
     if (argc == 3) {
         std::string mode = argv[1];
         if (mode == "--preview-dir") {}
         else if (mode == "--preview-reader") { ui.book = 42; ui.chapter = 3; ui.open_reader(16); }
+        else if (mode == "--preview-reader-start") { ui.book = 42; ui.chapter = 3; ui.open_reader(1); }
         else if (mode == "--preview-search") { ui.query = "yesu"; ui.perform_search(); }
         else return 2;
         ui.render(); return dump(argv[2]) ? 0 : 1;

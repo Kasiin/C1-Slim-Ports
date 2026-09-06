@@ -60,8 +60,8 @@ def main():
     for name, source in (
         ("c1bible", ROOT / "build" / "c1bible"),
         ("bible.dat", ROOT / "build" / "bible.dat"),
-        ("font15.bin", ROOT.parent / "C1News" / "font15.bin"),
-        ("width15.bin", ROOT.parent / "C1News" / "width15.bin"),
+        ("font12.bin", ROOT / "font12.bin"),
+        ("width12.bin", ROOT / "width12.bin"),
     ):
         shutil.copy2(source, OUT / name)
     for name in ("launch-bible.sh", "install.sh"):
@@ -73,8 +73,8 @@ def main():
         "ICON": digest(OUT / "ic_desktop_cwxz.png"),
         "APP": digest(OUT / "c1bible"),
         "DATA": digest(OUT / "bible.dat"),
-        "FONT": digest(OUT / "font15.bin"),
-        "WIDTH": digest(OUT / "width15.bin"),
+        "FONT": digest(OUT / "font12.bin"),
+        "WIDTH": digest(OUT / "width12.bin"),
         "WRAPPER": digest(OUT / "launch-bible.sh"),
     }
     (OUT / "manifest.env").write_text("".join(f"{k}={v}\n" for k, v in manifest.items()), newline="\n")
