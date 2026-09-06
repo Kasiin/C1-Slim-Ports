@@ -18,3 +18,4 @@ if($large){$large|Select-Object FullName,Length|Format-Table;throw 'Files over 5
 if($LASTEXITCODE -eq 0){$secretHits;throw 'Possible secret material found'}
 if($LASTEXITCODE -gt 1){throw 'Secret scan failed'}
 Write-Output 'PASS: no forbidden private content, oversized files, or obvious credentials.'
+exit 0
