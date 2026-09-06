@@ -1,0 +1,11 @@
+*.sh text eol=lf
+*.ps1 text eol=crlf
+*.py text eol=lf
+*.go text eol=lf
+*.cpp text eol=lf
+*.h text eol=lf
+*.md text eol=lf
+*.png binary
+*.ttf binary
+*.otf binary
+*.bin binary

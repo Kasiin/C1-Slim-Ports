@@ -1,0 +1,34 @@
+# Local/private device material. Never commit manufacturer firmware or backups.
+/private/
+**/mpenMain*
+**/*.lav
+**/*.dat
+**/LVM.bin
+
+# Generated build and diagnostic output
+**/build/
+**/artifacts/
+**/.diagnostics/
+**/*.log
+**/*.frame
+**/*.bin
+!C1News/font.bin
+!C1News/font14.bin
+!C1News/font15.bin
+!C1News/width14.bin
+!C1News/width15.bin
+
+# Local Bible source cache (downloaded and hash-verified by the build script)
+/C1Bible/third_party/cuvs.sqlite
+/C1Bible/third_party/*.download
+
+# Language/tool caches
+**/__pycache__/
+**/*.py[cod]
+**/.gocache/
+**/.gomodcache/
+**/.pytest_cache/
+**/.idea/
+**/.vscode/
+*.zip
+*.tar.gz
