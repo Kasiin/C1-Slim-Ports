@@ -33,11 +33,12 @@
 - [`C1Mota`](C1Mota/)：20 层魔塔集成脚本。
 - [`C1Bible`](C1Bible/)：离线和合本阅读器与拼音全文搜索。
 - [`docs`](docs/)：设备、构建、安装和第三方资料。
+- [`tools/root-adb`](tools/root-adb/)：由原作者 fwz233 提供的 root ADB 放行方案、Python 工具与从零操作说明。
 - [`launcher/terminal`](launcher/terminal/)：最初分析原厂 launcher 时保留的补丁工具，仅供研究和复现。
 
 ## 开始之前
 
-请先阅读 [构建与安装](docs/BUILDING.md) 和 [设备与恢复说明](docs/DEVICE_NOTES.md)。这些补丁针对测试过的特定固件逐字节校验，**不要对其他固件强行跳过哈希检查**。
+设备尚未开启 ADB 时，先阅读 [获取 root ADB](tools/root-adb/README.md)；已有 root ADB 后再阅读 [构建与安装](docs/BUILDING.md) 和 [设备与恢复说明](docs/DEVICE_NOTES.md)。这些补丁针对测试过的特定固件逐字节校验，**不要对其他固件强行跳过哈希检查**。
 
 仓库不包含原厂 launcher、系统备份、设备日志、编译产物，也不包含蛙蛙富翁或魔塔的游戏本体。需要相关文件时，请从自己拥有的设备或合法副本中提取并放入被 `.gitignore` 排除的 `private/` 目录。
 

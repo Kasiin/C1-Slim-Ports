@@ -28,6 +28,7 @@
 **/.gocache/
 **/.gomodcache/
 **/.pytest_cache/
+**/.venv/
 **/.idea/
 **/.vscode/
 *.zip
