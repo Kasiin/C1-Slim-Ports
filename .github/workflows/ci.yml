@@ -26,7 +26,14 @@ jobs:
         working-directory: C1News
         run: go test ./...
       - name: Python syntax
-        run: python -m compileall -q C1Bible C1LavaX C1Mota C1News C1Sudoku launcher
+        run: python -m compileall -q C1Bible C1LavaX C1Mota C1News C1Sudoku launcher tools/root-adb
+      - name: Root ADB helper syntax
+        shell: pwsh
+        run: |
+          [scriptblock]::Create((Get-Content -Raw tools/root-adb/install-persistent-adb.ps1)) | Out-Null
+          $gitBash = Join-Path $env:ProgramFiles 'Git\bin\bash.exe'
+          & $gitBash -n tools/root-adb/device-persistent-adb.sh
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Publication preflight
         shell: pwsh
         run: ./tools/preflight.ps1

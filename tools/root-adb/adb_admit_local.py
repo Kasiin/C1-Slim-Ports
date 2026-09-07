@@ -1,5 +1,5 @@
 # C1-Slim / MP-D261 root-ADB admission helper.
-# Original author and method: fwz233 (https://github.com/fwz233)
+# Original author and method: fwz233-RE (https://github.com/fwz233-RE)
 # Public-repository integration: C1 Slim Ports contributors.
 # SPDX-License-Identifier: GPL-3.0-or-later
 

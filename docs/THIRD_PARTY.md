@@ -3,7 +3,7 @@
 本仓库原创代码默认使用根目录的 GPL-3.0。下列组件或数据保留各自许可：
 
 - **C1ancher**：Terminal 的显示布局和键盘映射曾参考 fwz233-RE 的 GPL-3.0 项目；仓库只保留必要的分析/补丁工具和归属说明。
-- **C1-Slim root ADB 放行方案与 Python 脚本**：原始作者为 [fwz233](https://github.com/fwz233)。本仓库保留作者署名，并将公开版本中的样机标识和默认 HTTP 明文日志移除。
+- **C1-Slim root ADB 放行、永久化方案与脚本**：原始作者为 [fwz233-RE](https://github.com/fwz233-RE)。本仓库保留作者署名，并将公开版本中的样机标识和默认 HTTP 明文日志移除；永久化包装器另加入固定固件哈希、三处恢复备份和卸载校验。
 - **lavax_vm**：来自 `zhiyb/lavax_vm`，其 MIT 许可证保留在 `C1LavaX/port/third_party/lavax_vm/LICENSE`。
 - **creack/pty、hinshun/vt10x**：Terminal 使用的 MIT 依赖，许可证随 vendored 源码保留。
 - **GNU Unifont 16.0.01**：数独界面字形及部分生成字形来源。Unifont 采用 SIL OFL 1.1 与 GPL-2.0-or-later + GNU Font Embedding Exception 双重许可；许可证副本位于 `THIRD_PARTY_LICENSES/`。

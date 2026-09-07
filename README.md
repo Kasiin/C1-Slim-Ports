@@ -33,7 +33,7 @@
 - [`C1Mota`](C1Mota/)：20 层魔塔集成脚本。
 - [`C1Bible`](C1Bible/)：离线和合本阅读器与拼音全文搜索。
 - [`docs`](docs/)：设备、构建、安装和第三方资料。
-- [`tools/root-adb`](tools/root-adb/)：由原作者 fwz233 提供的 root ADB 放行方案、Python 工具与从零操作说明。
+- [`tools/root-adb`](tools/root-adb/)：由原作者 fwz233-RE 提供的 root ADB 放行方案、Python 工具，以及永久化、验证和回滚说明。
 - [`launcher/terminal`](launcher/terminal/)：最初分析原厂 launcher 时保留的补丁工具，仅供研究和复现。
 
 ## 开始之前
